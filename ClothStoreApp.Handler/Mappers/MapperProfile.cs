@@ -6,20 +6,20 @@ namespace ClothStoreApp.Handler.Mappers
     {
         public MapperProfile()
         {
-            ApplyConfigurationFromAssembly();
+            //ApplyConfigurationFromAssembly();
         }
 
-        private void ApplyConfigurationFromAssembly()
-        {
-            Type type = typeof(BaseEntityMapperProfile);
-            var implements = AppDomain.CurrentDomain.GetAssemblies()
-                .Select(s => s.GetType())
-                .Where(p => type.IsAssignableFrom(p));
+        //private void ApplyConfigurationFromAssembly()
+        //{
+        //    Type type = typeof(BaseEntityMapperProfile);
+        //    var implements = AppDomain.CurrentDomain.GetAssemblies()
+        //        .Select(s => s.GetType())
+        //        .Where(p => type.IsAssignableFrom(p));
 
-            foreach(var implement in implements)
-            {
-                implement.GetMethod("ConfigureMapping").Invoke(null, null);
-            }
-        }
+        //    foreach(var implement in implements)
+        //    {
+        //        implement.GetMethod("ConfigureMapping").Invoke(null, null);
+        //    }
+        //}
     }
 }

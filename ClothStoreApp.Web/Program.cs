@@ -27,7 +27,7 @@ namespace ClothStoreApp.Web
             builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Broker).Assembly));
             builder.Services.AddTransient<IBroker, Broker>();
 
-            builder.Services.AddAutoMapper(config => config.AddProfile(new MapperProfile()));
+            builder.Services.AddAutoMapper(config => config.AddMaps(typeof(MapperProfile).Assembly));
 
             builder.Services.AddSwaggerGen(setup =>
             {

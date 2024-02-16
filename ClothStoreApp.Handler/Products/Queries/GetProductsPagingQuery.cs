@@ -57,7 +57,7 @@ namespace ClothStoreApp.Handler.Products.Queries
             result.PageNumber = request.PageNumber;
             result.PageSize = request.PageSize;
 
-            query += $" offset {(request.PageSize * request.PageNumber)} rows fetch next {request.PageSize} rows only";
+            query += $" offset {(request.PageNumber - 1) * request.PageSize} rows fetch next {request.PageSize} rows only";
 
             using (_sqlConnection = new SqlConnection(_configuration.GetConnectionString("Default")))
             {

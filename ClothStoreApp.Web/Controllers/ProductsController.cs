@@ -19,15 +19,47 @@ namespace ClothStoreApp.Web.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetProductById([FromQuery] GetProductByIdQuery request)
+        {
+            var result = await _broker.Query(request);
+            if (result.IsSuccess)
+                return Ok(result);
+            return BadRequest(result);
+        }
+
+        [HttpGet]
         public async Task<PaginationResult<ICollection<Product>>> GetProductsPaging([FromQuery]GetProductsPagingQuery request)
         {
             return await _broker.Query(request);
         }
 
         [HttpPost]
-        public async Task<BaseResult> CreateProduct(CreateProductCommand request)
+        public async Task<IActionResult> CreateProduct(CreateProductCommand request)
         {
-            return await _broker.Command(request);
+            var result = await _broker.Command(request);
+
+            if (result.IsSuccess == false)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpPatch]
+        public async Task<IActionResult> UpdateProduct(UpdateProductCommand request)
+        {
+            return Ok();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteProduct(DeleteProductCommand request)
+        {
+            var result = await _broker.Command(request);
+            if (result.IsSuccess)
+                return Ok(result);
+
+            return BadRequest(result);
         }
     }
 }
