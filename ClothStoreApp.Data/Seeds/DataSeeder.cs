@@ -15,6 +15,7 @@ namespace ClothStoreApp.Data.Seeds
         {
             if(!db.Users.Any())
             {
+                PasswordHasher<ApplicationUser> hasher = new PasswordHasher<ApplicationUser>();
                 ApplicationUser user = new ApplicationUser()
                 {
                     UserName = "jinkey.coredev",
@@ -24,9 +25,12 @@ namespace ClothStoreApp.Data.Seeds
                     EmailConfirmed = true,
                     PhoneNumber = "0795671811",
                     PhoneNumberConfirmed = true,
+                    PasswordHash = hasher.HashPassword(null, "Admin123"),
                     FirstName = "Quang",
                     LastName = "Ngo Viet",
-                    Dob = new DateTime(2001, 11, 18)
+                    Dob = new DateTime(2001, 11, 18),
+                    SecurityStamp = Guid.NewGuid().ToString(),
+                    ConcurrencyStamp = Guid.NewGuid().ToString()
                 };
                 db.Users.Add(user);
                 db.SaveChanges();
