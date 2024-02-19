@@ -3,6 +3,7 @@ using ClothStoreApp.Handler.Infrastructures;
 using ClothStoreApp.Handler.Products.Commands;
 using ClothStoreApp.Handler.Products.Queries;
 using ClothStoreApp.Handler.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClothStoreApp.Web.Controllers
@@ -34,6 +35,7 @@ namespace ClothStoreApp.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Moderator")]
         public async Task<IActionResult> CreateProduct(CreateProductCommand request)
         {
             var result = await _broker.Command(request);
@@ -47,12 +49,14 @@ namespace ClothStoreApp.Web.Controllers
         }
 
         [HttpPatch]
+        [Authorize(Roles = "Admin, Moderator")]
         public async Task<IActionResult> UpdateProduct(UpdateProductCommand request)
         {
             return Ok();
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin, Moderator")]
         public async Task<IActionResult> DeleteProduct(DeleteProductCommand request)
         {
             var result = await _broker.Command(request);
