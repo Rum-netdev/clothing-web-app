@@ -15,6 +15,9 @@ namespace ClothStoreApp.Data.Configurations
         {
             builder.ToTable("Users");
             builder.HasKey(t => t.Id);
+
+            builder.Property(t => t.FirstName).IsRequired();
+            builder.Property(t => t.LastName).IsRequired();
         }
     }
 }

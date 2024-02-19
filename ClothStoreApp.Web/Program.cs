@@ -1,6 +1,10 @@
 using ClothStoreApp.Data;
+using ClothStoreApp.Data.Entities;
+using ClothStoreApp.Data.Seeds;
 using ClothStoreApp.Handler.Infrastructures;
 using ClothStoreApp.Handler.Mappers;
+using ClothStoreApp.Share.Options;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -22,6 +26,26 @@ namespace ClothStoreApp.Web
                 option.EnableDetailedErrors();
                 option.EnableSensitiveDataLogging();
             });
+
+            // This .AddIdentity calls the .AddAuthentication() automatically, so we do not need
+            // config the authentication service
+            builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(builder =>
+            {
+                builder.User.RequireUniqueEmail = true;
+
+                builder.SignIn.RequireConfirmedPhoneNumber = false;
+                builder.SignIn.RequireConfirmedEmail = false;
+                builder.SignIn.RequireConfirmedAccount = false;
+
+                builder.Password.RequireDigit = true;
+                builder.Password.RequireUppercase = true;
+                builder.Password.RequiredLength = 6;
+            })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            builder.Services.Configure<JwtSecurityConfiguration>(options =>
+                builder.Configuration.GetSection("JwtSecurityConfiguration").Bind(options));
 
             // Register handler for Mediator broker
             builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Broker).Assembly));
@@ -52,6 +76,8 @@ namespace ClothStoreApp.Web
             app.UseAuthentication();
             app.UseAuthorization();
 
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specific the Swagger JSON endpoint
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "ClothStoreApi V1");
@@ -63,9 +89,17 @@ namespace ClothStoreApp.Web
                 endpoint.MapControllerRoute("default", "/{controller=Home}/{action=Index}/{id?}");
             });
 
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specific the Swagger JSON endpoint
+            // Seed data
+            using (var scope = app.Services.CreateScope())
+            {
+                var serviceProvider = scope.ServiceProvider;
+                var db = serviceProvider.GetService<ApplicationDbContext>();
+                DataSeeder.Seed(db);
+            }
+           
             app.Run();
+
+            
         }
     }
 }
