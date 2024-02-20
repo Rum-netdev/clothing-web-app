@@ -34,7 +34,6 @@ namespace ClothStoreApp.Handler.Products.Queries
             // 2 options: direct query or calling Stored Procedures
             // Option 1:
             string query = $"select * from {nameof(Product)}s";
-
             var properties = typeof(Product).GetProperties();
 
             if(!string.IsNullOrEmpty(request.Keyword))
@@ -45,11 +44,13 @@ namespace ClothStoreApp.Handler.Products.Queries
                 {
                     if(property.PropertyType == typeof(string))
                     {
-                        query += $" {property.Name}={request.Keyword}";
+                        query += $" {property.Name}={request.Keyword} ||";
                     }
                 }
+                query += query.Substring(0, query.Length - 2).TrimEnd();
             }
 
+            string countQuery = query;
             query += $" order by {nameof(Product)}s.Id";
 
             if (request.PageSize < 10) request.PageSize = 10;
@@ -63,8 +64,9 @@ namespace ClothStoreApp.Handler.Products.Queries
             {
                 var products = (await _sqlConnection.QueryAsync<Product>(query)).ToList();
                 result.Data = products;
-                result.TotalPages = Convert.ToInt32(products.Count / request.PageSize);
-                result.TotalRecords = products.Count;
+                result.TotalRecords = await _sqlConnection.ExecuteAsync(countQuery);
+                int totalPages = result.TotalRecords / request.PageSize;
+                result.TotalPages = totalPages > 0 ? totalPages : 1;
             }
 
             return result;

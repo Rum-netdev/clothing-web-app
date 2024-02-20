@@ -38,6 +38,7 @@ namespace ClothStoreApp.Handler.Products.Commands
             {
                 result.IsSuccess = true;
                 result.Message = "Delete product successfully";
+                return result;
             }
 
             ProductDto entityDtoData = _mapper.Map<Product, ProductDto>(exist);

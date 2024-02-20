@@ -4,9 +4,12 @@ using ClothStoreApp.Data.Seeds;
 using ClothStoreApp.Handler.Infrastructures;
 using ClothStoreApp.Handler.Mappers;
 using ClothStoreApp.Share.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 namespace ClothStoreApp.Web
 {
@@ -43,6 +46,28 @@ namespace ClothStoreApp.Web
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            JwtSecurityConfiguration jwtConfig = new();
+            builder.Configuration.GetSection("JwtSecurityConfiguration")
+                .Bind(jwtConfig);
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(x =>
+                {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = false;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidAudience = jwtConfig.Audience,
+                        ValidIssuer = jwtConfig.Issuer,
+                        ValidateAudience = true,
+                        ValidateIssuer = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.SecurityKey)),
+                        RequireExpirationTime = true,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
 
             builder.Services.Configure<JwtSecurityConfiguration>(options =>
                 builder.Configuration.GetSection("JwtSecurityConfiguration").Bind(options));
