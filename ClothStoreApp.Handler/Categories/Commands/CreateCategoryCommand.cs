@@ -34,7 +34,7 @@ namespace ClothStoreApp.Handler.Categories.Commands
                 return result;
             }
 
-            Category category = _mapper.Map<Category>(request);
+            Category category = _mapper.Map<CategoryDto, Category>(request);
             _db.Categories.Add(category);
             int affectedRows = await _db.SaveChangesAsync();
 

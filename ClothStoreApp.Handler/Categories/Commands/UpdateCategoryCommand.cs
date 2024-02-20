@@ -44,6 +44,7 @@ namespace ClothStoreApp.Handler.Categories.Commands
             {
                 result.IsSuccess = true;
                 result.Message = $"Update category successfully";
+                result.Data = _mapper.Map<Category, CategoryDto>(existedCat);
             }
             else
             {

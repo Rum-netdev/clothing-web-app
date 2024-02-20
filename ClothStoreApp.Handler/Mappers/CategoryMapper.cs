@@ -9,7 +9,7 @@ namespace ClothStoreApp.Handler.Mappers
         public CategoryMapper()
         {
             CreateMap<Category, CategoryDto>();
-            CreateMap<CategoryDto, CategoryDto>();
+            CreateMap<CategoryDto, Category>();
         }
     }
 }

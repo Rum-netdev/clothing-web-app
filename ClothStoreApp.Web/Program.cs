@@ -3,6 +3,7 @@ using ClothStoreApp.Data.Entities;
 using ClothStoreApp.Data.Seeds;
 using ClothStoreApp.Handler.Infrastructures;
 using ClothStoreApp.Handler.Mappers;
+using ClothStoreApp.Handler.Services;
 using ClothStoreApp.Share.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -75,6 +76,10 @@ namespace ClothStoreApp.Web
             // Register handler for Mediator broker
             builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Broker).Assembly));
             builder.Services.AddTransient<IBroker, Broker>();
+
+            builder.Services.Configure<EmailConfiguration>(config =>
+                builder.Configuration.GetSection(nameof(EmailConfiguration)).Bind(config));
+            builder.Services.AddTransient<IEmailService, EmailService>();
 
             builder.Services.AddAutoMapper(config => config.AddMaps(typeof(MapperProfile).Assembly));
 

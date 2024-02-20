@@ -30,7 +30,6 @@ namespace ClothStoreApp.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin, Moderator")]
         public async Task<IActionResult> CreateCategory([FromForm]CreateCategoryCommand request)
         {
             var result = await _broker.Command(request);
@@ -42,8 +41,7 @@ namespace ClothStoreApp.Web.Controllers
         }
 
         [HttpDelete]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin, Moderator")]
-        public async Task<IActionResult> DeleteCategory([FromForm]DeleteCategoryCommand request)
+        public async Task<IActionResult> DeleteCategory(DeleteCategoryCommand request)
         {
             var result = await _broker.Command(request);
             if (result.IsSuccess)
@@ -52,6 +50,7 @@ namespace ClothStoreApp.Web.Controllers
             return BadRequest(result);
         }
 
+        [HttpPatch]
         public async Task<IActionResult> UpdateCategory([FromForm] UpdateCategoryCommand request)
         {
             var result = await _broker.Command(request);

@@ -33,5 +33,13 @@ namespace ClothStoreApp.Web.Controllers
 
             return BadRequest(result);
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> GenerateEmailConfirmationToken(
+        //    GenerateEmailConfirmationTokenCommand command)
+        //{
+        //    var result = await _broker.Command(command);
+        //    return Ok(result);
+        //}
     }
 }
