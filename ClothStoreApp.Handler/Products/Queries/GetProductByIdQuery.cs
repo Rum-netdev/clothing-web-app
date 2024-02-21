@@ -9,7 +9,7 @@ namespace ClothStoreApp.Handler.Products.Queries
 {
     public class GetProductByIdQuery : IQuery<GetProductByIdQueryResult>
     {
-        public int Id { get; set; }
+        public int ProductId { get; set; }
     }
 
     public class GetProductByIdQueryHandler : IQueryHandler<GetProductByIdQuery, GetProductByIdQueryResult>
@@ -28,10 +28,10 @@ namespace ClothStoreApp.Handler.Products.Queries
         {
             GetProductByIdQueryResult result = new();
 
-            Product exist = _db.Products.Where(t => t.Id == request.Id).FirstOrDefault();
+            Product exist = _db.Products.Where(t => t.Id == request.ProductId).FirstOrDefault();
             if(exist == null)
             {
-                result.Message = $"There're no products matching with ID {request.Id}";
+                result.Message = $"There're no products matching with ID {request.ProductId}";
                 result.IsSuccess = false;
                 return result;
             }

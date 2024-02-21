@@ -32,16 +32,19 @@ namespace ClothStoreApp.Handler.Accounts.Commands
         private readonly IConfiguration _configuration;
         private readonly JwtSecurityConfiguration _jwtConfiguration;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public LoginCommandHandler(IConfiguration configuration,
             ApplicationDbContext db,
             SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager,
             IOptions<JwtSecurityConfiguration> jwtConfiguration)
         {
             _db = db;
             _configuration = configuration;
             _jwtConfiguration = jwtConfiguration.Value;
             _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         public async Task<LoginCommandResult> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -65,7 +68,8 @@ namespace ClothStoreApp.Handler.Accounts.Commands
 
             if(signInResult.Succeeded)
             {
-                SetSuccessLoginToken(ref result, user);
+                var userRoles = await _userManager.GetRolesAsync(user);
+                SetSuccessLoginToken(ref result, user, userRoles);
                 result.IsSuccess = true;
                 result.Message = "Login successfully";
             }
@@ -88,14 +92,12 @@ namespace ClothStoreApp.Handler.Accounts.Commands
             return result;
         }
 
-        public void SetSuccessLoginToken(ref LoginCommandResult result, ApplicationUser user)
+        public void SetSuccessLoginToken(ref LoginCommandResult result, ApplicationUser user, ICollection<string> roles)
         {
             //JwtConfigurationDtos jwtInfo = new JwtConfigurationDtos();
             //_configuration.GetSection("JwtConfigurations").Bind(jwtInfo);
 
-
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfiguration.SecurityKey));
-
             DateTime expiredTime = DateTime.UtcNow.AddMinutes(10);
 
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor()
@@ -105,7 +107,9 @@ namespace ClothStoreApp.Handler.Accounts.Commands
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(IdentityClaimsConst.UserName, user.UserName),
-                    new Claim(IdentityClaimsConst.Email, user.Email)
+                    new Claim(IdentityClaimsConst.Email, user.Email),
+                    //new Claim(IdentityClaimsConst.Roles, string.Join(',', roles)),
+                    new Claim(ClaimTypes.Role, string.Join(',', roles))
                 }),
                 Expires = expiredTime,
                 SigningCredentials = new SigningCredentials(

@@ -30,13 +30,22 @@ namespace ClothStoreApp.Web.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetProductsByCategoryId([FromQuery]GetProductsByCategoryIdQuery request)
+        {
+            var result = await _broker.Query(request);
+            if (result.IsSuccess) return Ok(result);
+
+            return BadRequest(result);
+        }
+
+        [HttpGet]
         public async Task<PaginationResult<ICollection<Product>>> GetProductsPaging([FromQuery]GetProductsPagingQuery request)
         {
             return await _broker.Query(request);
         }
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin, Moderator")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> CreateProduct(CreateProductCommand request)
         {
             var result = await _broker.Command(request);
@@ -50,14 +59,20 @@ namespace ClothStoreApp.Web.Controllers
         }
 
         [HttpPatch]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin, Moderator")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> UpdateProduct(UpdateProductCommand request)
         {
-            return Ok();
+            var result = await _broker.Command(request);
+
+            if (result.IsSuccess == false)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
         [HttpDelete]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin, Moderator")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> DeleteProduct(DeleteProductCommand request)
         {
             var result = await _broker.Command(request);

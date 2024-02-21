@@ -16,6 +16,12 @@ namespace ClothStoreApp.Data.Configurations
             builder.Property(t => t.UnitsInStock).IsRequired().HasDefaultValue(0);
             builder.Property(t => t.UnitsOnOrder).IsRequired().HasDefaultValue(0);
             builder.Property(t => t.ReorderLevel).IsRequired().HasDefaultValue(0);
+
+            builder.HasOne(t => t.Category)
+                .WithMany(t => t.Products)
+                .HasForeignKey(f => f.CategoryId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

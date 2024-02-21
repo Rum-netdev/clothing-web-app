@@ -4,6 +4,8 @@
     {
         public const string Email = "IdentityEmail"; 
         public const string PhoneNumber = "IdentityPhoneNumber"; 
-        public const string UserName = "IdentityUserName"; 
+        public const string UserName = "IdentityUserName";
+        public const string Roles = "IdentityUserRoles";
+        public const string FullName = "IdentityFullName";
     }
 }

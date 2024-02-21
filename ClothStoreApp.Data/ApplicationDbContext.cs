@@ -87,5 +87,6 @@ namespace ClothStoreApp.Data
         public DbSet<ApplicationRole> Roles { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Order> Orders { get; set; }
     }
 }

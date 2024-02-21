@@ -27,6 +27,15 @@ namespace ClothStoreApp.Handler.Products.Commands
         {
             CreateProductCommandResult result = new();
             var product = _mapper.Map<ProductDto, Product>(request);
+
+            // Find assigned category is existing in storage (db)
+            if (!_db.Categories.Any(t => t.Id == request.CategoryId))
+            {
+                result.Message = "The category does not exist in application, could not create the product";
+                result.IsSuccess = false;
+                return result;
+            }
+
             _db.Products.Add(product);
             int affectedRows = await _db.SaveChangesAsync();
 

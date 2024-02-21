@@ -17,5 +17,8 @@ namespace ClothStoreApp.Data.Entities
         public DateTime CreatedAt { get;set; }
         public int ModifiedBy { get; set; }
         public DateTime ModifiedAt { get;set; }
+        public int? CategoryId { get; set; }
+        public Category Category { get; set; }
+        public ICollection<OrderDetail> OrderDetail { get; set; }
     }
 }

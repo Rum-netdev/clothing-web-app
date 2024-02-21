@@ -4,11 +4,6 @@ using ClothStoreApp.Data.Entities;
 using ClothStoreApp.Handler.Infrastructures;
 using ClothStoreApp.Handler.Products.Dtos;
 using ClothStoreApp.Handler.Responses;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ClothStoreApp.Handler.Products.Commands
 {

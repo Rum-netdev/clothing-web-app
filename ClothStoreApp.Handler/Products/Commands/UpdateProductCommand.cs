@@ -9,7 +9,7 @@ namespace ClothStoreApp.Handler.Products.Commands
 {
     public class UpdateProductCommand : ProductDto, ICommand<UpdateProductCommandResult>
     {
-        public int Id { get; set; }
+        public int ProductId { get; set; }
     }
 
 
@@ -29,10 +29,17 @@ namespace ClothStoreApp.Handler.Products.Commands
         {
             var result = new UpdateProductCommandResult();
 
-            Product exist = _db.Products.Where(t => t.Id == request.Id).FirstOrDefault();
+            Product exist = _db.Products.Where(t => t.Id == request.ProductId).FirstOrDefault();
             if(exist == null)
             {
-                result.Message = $"The product with ID is {request.Id} is not existing";
+                result.Message = $"The product with ID is {request.ProductId} is not existing";
+                result.IsSuccess = false;
+                return result;
+            }
+
+            if(!_db.Categories.Any(t => t.Id == request.CategoryId))
+            {
+                result.Message = "The category does not exist in application, could not update";
                 result.IsSuccess = false;
                 return result;
             }
@@ -42,13 +49,14 @@ namespace ClothStoreApp.Handler.Products.Commands
             exist.UnitPrice = request.UnitPrice;
             exist.QuantityPerUnit = request.QuantityPerUnit;
             exist.UnitsInStock = request.UnitsInStock;
+            exist.CategoryId = request.CategoryId;
 
             int affectedRows = await _db.SaveChangesAsync();
 
             result.IsSuccess = affectedRows > 0;
             result.Message = affectedRows > 0 ?
-                $"Update the product has ID is {request.Id} successfully" :
-                $"Update the product has ID is {request.Id} failure";
+                $"Update the product has ID is {request.ProductId} successfully" :
+                $"Update the product has ID is {request.ProductId} failure";
 
             result.Data = affectedRows > 0 ?
                 _mapper.Map<Product, ProductDto>(exist) :

@@ -1,17 +1,18 @@
 ﻿using ClothStoreApp.Data.Entities.Shared;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ClothStoreApp.Data.Entities
 {
-    public class Category : IEntityId, IAuditableEntity
+    public class Cart : IEntityId, IAuditableEntity
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public int? ParentId { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
         public int ModifiedBy { get; set; }
         public DateTime ModifiedAt { get; set; }
-        public ICollection<Product> Products { get; set; }
     }
 }

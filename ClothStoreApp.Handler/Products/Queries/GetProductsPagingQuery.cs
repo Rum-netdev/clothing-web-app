@@ -10,7 +10,7 @@ namespace ClothStoreApp.Handler.Products.Queries
 {
     public class GetProductsPagingQuery : IQuery<GetProductsPagingQueryResult>
     {
-        public string Keyword { get; set; } = "";
+        public string? Keyword { get; set; } = "";
         public int PageSize { get; set; } = 10;
         public int PageNumber { get; set; } = 1;
     }
