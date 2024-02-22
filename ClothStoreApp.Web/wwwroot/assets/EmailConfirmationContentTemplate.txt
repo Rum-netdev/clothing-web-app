@@ -1,0 +1,12 @@
+﻿Dear {0},
+
+Before continue email confirmation process, I really thankful because you have chosen my store.
+Maybe when use my application, you will have meet some confusions or mistakes. Please dont reject and say bye with our application.
+Instead of, you can report them to me through any contact methods (I will notice them below).
+Thank you so much!
+
+This below is email confirmation url, please click it to confirm and link your email to your account:
+{1}.
+
+Contact to me:
+Facebook: https://facebook.com/lt2212

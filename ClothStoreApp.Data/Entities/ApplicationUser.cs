@@ -7,6 +7,7 @@ namespace ClothStoreApp.Data.Entities
         public string LastName { get; set; }
         public DateTime Dob { get; set; }
         public string Address { get; set; }
-        public ICollection<Order> Orders { get; set; }
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
+        public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
     }
 }

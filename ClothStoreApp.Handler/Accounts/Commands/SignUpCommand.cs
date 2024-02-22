@@ -59,6 +59,7 @@ namespace ClothStoreApp.Handler.Accounts.Commands
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Dob = request.Dob,
+                Address = request.Address,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 ConcurrencyStamp = Guid.NewGuid().ToString(),
             };

@@ -108,6 +108,7 @@ namespace ClothStoreApp.Handler.Accounts.Commands
                 {
                     new Claim(IdentityClaimsConst.UserName, user.UserName),
                     new Claim(IdentityClaimsConst.Email, user.Email),
+                    new Claim(IdentityClaimsConst.UserId, user.Id.ToString()),
                     //new Claim(IdentityClaimsConst.Roles, string.Join(',', roles)),
                     new Claim(ClaimTypes.Role, string.Join(',', roles))
                 }),
