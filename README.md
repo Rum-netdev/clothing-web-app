@@ -1,5 +1,7 @@
 ClothWebApp (API base).
+
 Director & Coder: Jinkey
+
 Technologies & libraries: C#/.NET 6.0 (Web API), EF Core, Dapper, MediatR, SignalR, ASP.NET Identity, SQL Server,...
 
 This is a simple web api that implements Vertical Slice Architecture for developing.
